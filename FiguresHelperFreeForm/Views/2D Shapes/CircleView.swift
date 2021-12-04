@@ -10,10 +10,38 @@ import SwiftUI
 struct CircleView: View {
     
     // MARK: Stored properties
-    @State var radius = 10.0
+    @State var providedRadius = ""
     
     // MARK: Computed properties
-    var area: Double {
+    
+    // Check the Input given by the user
+    // If possible, returns a Double
+    // Otherwise, returns nil
+    var radius: Double? {
+        
+        // 1. Ensure that we can change the Input (String) to a Double
+        // 2. Ensure that the value is more than zero
+        // To do this, we use a "guard" statement
+        guard let radius = Double(providedRadius),
+              radius > 0
+        else {
+            // When either of the tests above do not pass, then we don't have a valid radius
+            return nil
+        }
+
+        // If we get here, we know the radius is valid
+        return radius
+        
+    }
+    
+    // attemps to coculat the area if it cannot , return nil
+    var area: Double? {
+        
+        //are the imputs valed?
+        //the black raduis is a local constant
+        //it only exist AFTER the gaurd statment
+        guard let radius = radius else { return nil }
+
         return Double.pi * radius * radius
     }
     
@@ -28,21 +56,10 @@ struct CircleView: View {
                 SectionLabelView(text: "Radius", variable: "r")
 
                 // Input: Radius
-                Slider(value: $radius,
-                       in: 0.0...100.0,
-                       step: 0.1,
-                       label: {
-                    Text("Radius")
-                },
-                       minimumValueLabel: {
-                    Text("0")
-                },
-                       maximumValueLabel: {
-                    Text("100")
-                })
+                TextField("Radius",
+                          text: $providedRadius,
+                          prompt: Text("Numeric value greater than 0"))
                 
-                // Output: Radius
-                SliderValueView(value: radius)
                 
                 SectionLabelView(text: "Area", variable: "")
                 
