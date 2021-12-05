@@ -10,11 +10,22 @@ import SwiftUI
 struct ParallelogramView: View {
     
     // MARK: Stored properties
-    @State var b = 10.0
+    @State var providedBase = ""
     @State var h = 10.0
     @State var c = 10.0
 
     // MARK: Computed properties
+    // Base
+    var base: Double? {
+        guard let base = Double(providedBase),
+                base > 0
+        else {
+            return nil
+            
+        }
+        return base
+    }
+    
     var area: Double {
         return b * h
     }
@@ -34,21 +45,13 @@ struct ParallelogramView: View {
                     SectionLabelView(text: "Base", variable: "b")
 
                     // Input: Base
-                    Slider(value: $b,
-                           in: 0.0...100.0,
-                           step: 0.1,
-                           label: {
-                        Text("Base")
-                    },
-                           minimumValueLabel: {
-                        Text("0")
-                    },
-                           maximumValueLabel: {
-                        Text("100")
-                    })
+                    TextField("Base",
+                              text: $providedBase,
+                              prompt: Text("Numeric value greater than 0"))
+                        .foregroundColor(base == nil ? Color.red : Color.primary)
                     
-                    // Output: Base
-                    SliderValueView(value: b)
+//                    // Output: Base
+//                    SliderValueView(value: base)
 
                 }
                 
