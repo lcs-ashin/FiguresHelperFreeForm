@@ -11,7 +11,7 @@ struct ParallelogramView: View {
     
     // MARK: Stored properties
     @State var providedBase = ""
-    @State var h = 10.0
+    @State var providedHeight = ""
     @State var c = 10.0
 
     // MARK: Computed properties
@@ -26,8 +26,20 @@ struct ParallelogramView: View {
         return base
     }
     
-    var area: Double {
-        return b * h
+    // Height
+    var height: Double? {
+        guard let height = Double(providedHeight),
+                height > 0
+        else {
+            return nil
+        }
+        return height
+    }
+    
+    var area: Double? {
+        guard let base = base, let height = height else { return nil }
+        
+        return base * height
     }
     
     var body: some View {
@@ -49,9 +61,6 @@ struct ParallelogramView: View {
                               text: $providedBase,
                               prompt: Text("Numeric value greater than 0"))
                         .foregroundColor(base == nil ? Color.red : Color.primary)
-                    
-//                    // Output: Base
-//                    SliderValueView(value: base)
 
                 }
                 
@@ -61,21 +70,10 @@ struct ParallelogramView: View {
                     SectionLabelView(text: "Height", variable: "h")
 
                     // Input: Height
-                    Slider(value: $h,
-                           in: 0.0...100.0,
-                           step: 0.1,
-                           label: {
-                        Text("Height")
-                    },
-                           minimumValueLabel: {
-                        Text("0")
-                    },
-                           maximumValueLabel: {
-                        Text("100")
-                    })
-                    
-                    // Output: Base
-                    SliderValueView(value: h)
+                    TextField("Height",
+                              text: $providedHeight,
+                              prompt: Text("Numeric value greater than 0"))
+                        .foregroundColor(height == nil ? Color.red : Color.primary)
 
                 }
 
