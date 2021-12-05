@@ -12,7 +12,7 @@ struct ParallelogramView: View {
     // MARK: Stored properties
     @State var providedBase = ""
     @State var providedHeight = ""
-    @State var c = 10.0
+    @State var providedDiagonal = ""
 
     // MARK: Computed properties
     // Base
@@ -34,6 +34,16 @@ struct ParallelogramView: View {
             return nil
         }
         return height
+    }
+    
+    // Diagonal
+    var diagonal: Double? {
+        guard let diagonal = Double(providedDiagonal),
+                diagonal > 0
+        else {
+            return nil
+        }
+        return diagonal
     }
     
     var area: Double? {
@@ -83,21 +93,10 @@ struct ParallelogramView: View {
                     SectionLabelView(text: "Diagonal", variable: "c")
 
                     // Input: Height
-                    Slider(value: $c,
-                           in: 0.0...100.0,
-                           step: 0.1,
-                           label: {
-                        Text("Height")
-                    },
-                           minimumValueLabel: {
-                        Text("0")
-                    },
-                           maximumValueLabel: {
-                        Text("100")
-                    })
-                    
-                    // Output: Base
-                    SliderValueView(value: c)
+                    TextField("Diagonal",
+                              text: $providedDiagonal,
+                              prompt: Text("Numeric value greater than 0"))
+                        .foregroundColor(diagonal == nil ? Color.red : Color.primary)
 
                 }
 
